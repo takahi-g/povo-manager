@@ -1,6 +1,6 @@
 {
-  "name": "POVO期限マネージャー",
-  "short_name": "POVO期限",
+  "name": "POVO管理",
+  "short_name": "POVO管理",
   "description": "POVOの契約期限やトッピング期限を管理するアプリ",
   "start_url": ".",
   "display": "standalone",
@@ -8,9 +8,9 @@
   "theme_color": "#fff200",
   "icons": [
     {
-      "src": "https://povo.jp/favicon.ico",
-      "sizes": "48x48",
-      "type": "image/x-icon"
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
