@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POVO 期限管理マネージャー</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-logo">
+            <span class="logo-povo">povo</span>
+            <span class="logo-subtitle">期限マネージャー</span>
+        </div>
+        <div class="header-actions">
+            <button id="btn-refresh" class="btn btn-secondary" title="更新">
+                <span class="material-icons-round">refresh</span>
+            </button>
+            <button id="btn-add-line" class="btn btn-primary">
+                <span class="material-icons-round">add_circle</span>
+                <span>回線を追加</span>
+            </button>
+            <button id="btn-export" class="btn btn-secondary" title="データをエクスポート">
+                <span class="material-icons-round">download</span>
+            </button>
+            <button id="btn-import" class="btn btn-secondary" title="データをインポート">
+                <span class="material-icons-round">upload</span>
+            </button>
+            <input type="file" id="file-import" accept=".json" style="display: none;">
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- サマリー統計エリア -->
+        <section class="summary-section">
+            <div class="summary-card total-card">
+                <div class="summary-icon-wrapper">
+                    <span class="material-icons-round">sim_card</span>
+                </div>
+                <div class="summary-content">
+                    <span class="summary-label">管理中の回線</span>
+                    <span id="stat-total-lines" class="summary-value">0</span>
+                </div>
+            </div>
+            <div class="summary-card alert-card">
+                <div class="summary-icon-wrapper">
+                    <span class="material-icons-round">warning_amber</span>
+                </div>
+                <div class="summary-content">
+                    <span class="summary-label">期限間近 (30日以内)</span>
+                    <span id="stat-warning-lines" class="summary-value">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 回線一覧グリッド -->
+        <section class="grid-container" id="lines-grid">
+            <!-- 動的に回線カードが挿入されます -->
+        </section>
+
+        <!-- 回線がない場合のプレースホルダー -->
+        <div id="empty-state" class="empty-state">
+            <span class="material-icons-round empty-icon">sim_card</span>
+            <h3>登録されている回線がありません</h3>
+            <p>「回線を追加」ボタンから、POVOの契約情報を登録してください。</p>
+        </div>
+    </main>
+
+    <!-- 回線 追加/編集 モーダル -->
+    <div id="modal-line" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">回線情報の追加</h2>
+                <button class="btn-close-modal" id="btn-close-modal">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            <form id="form-line" class="modal-form">
+                <input type="hidden" id="edit-line-id">
+                
+                <div class="form-group">
+                    <label for="input-line-name">回線名（識別名）</label>
+                    <input type="text" id="input-line-name" placeholder="例: メイン回線、iPad用など" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-phone-number">電話番号（ハイフンなし）</label>
+                    <input type="tel" id="input-phone-number" placeholder="例: 09012345678" pattern="[0-9]*">
+                </div>
+
+                <div class="form-group">
+                    <label for="input-last-topping-date">最終有料トッピング購入日（180日警告用）</label>
+                    <input type="date" id="input-last-topping-date" required>
+                    <small class="form-help">POVOは180日以上有料トッピングの購入がないと利用停止になります。</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-topping-expiry">現在適用中のトッピング有効期限（任意）</label>
+                    <input type="date" id="input-topping-expiry">
+                    <small class="form-help">プロモコードや期間限定トッピングの有効期限がある場合に入力します。</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-note">メモ</label>
+                    <textarea id="input-note" rows="3" placeholder="トッピング履歴や用途など自由に入力してください"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">保存する</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- トースト通知用のコンテナ -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
